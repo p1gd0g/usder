@@ -101,6 +101,23 @@ void main() {
       expect(controller.totalDays.value, 0);
     });
 
+    test('Handle zero exchange rate', () {
+      // Set input values with zero exchange rate
+      controller.principalController.text = '10000';
+      controller.rmbRateController.text = '3.5';
+      controller.usdRateController.text = '4.2';
+      controller.exchangeRateController.text = '0';
+      
+      // Set valid future date
+      final futureDate = DateTime.now().add(const Duration(days: 365));
+      controller.selectMaturityDate(futureDate);
+      
+      // Should return 0 to avoid division by zero
+      expect(controller.rmbProfit.value, 0.0);
+      expect(controller.usdProfit.value, 0.0);
+      expect(controller.totalDays.value, 0);
+    });
+
     test('Handle past date', () {
       // Set input values
       controller.principalController.text = '10000';

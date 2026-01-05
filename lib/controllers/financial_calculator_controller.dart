@@ -45,7 +45,7 @@ class FinancialCalculatorController extends GetxController {
       final principal = double.tryParse(principalController.text) ?? 0.0;
       final maturityDate = selectedDate.value;
       
-      if (maturityDate == null || principal <= 0) {
+      if (maturityDate == null || principal <= 0 || exchangeRate <= 0) {
         rmbProfit.value = 0.0;
         usdProfit.value = 0.0;
         totalDays.value = 0;
