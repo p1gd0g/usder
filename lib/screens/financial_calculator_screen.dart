@@ -120,7 +120,7 @@ class FinancialCalculatorScreen extends StatelessWidget {
               controller: controller,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}$')),
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
               ],
               decoration: InputDecoration(
                 hintText: hint,
