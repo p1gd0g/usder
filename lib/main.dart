@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'dart:developer' as developer;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:stack_trace/stack_trace.dart';
+import 'screens/financial_calculator_screen.dart';
 
 void main() {
 
@@ -29,7 +30,22 @@ void main() {
         }
         // }
       },
-      // theme: AppTheme.light,
+      title: '理财收益计算器',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+      ),
+      home: const FinancialCalculatorScreen(),
     ),
   );
 }
