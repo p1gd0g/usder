@@ -1,13 +1,11 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:get/get.dart';
 import 'package:myapp/controller.dart';
+import 'package:myapp/result.dart';
 import 'dart:developer' as developer;
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:stack_trace/stack_trace.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +21,8 @@ void main() {
 
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+
       logWriterCallback: (value, {isError = false}) {
         // void defaultLogWriterCallback(String value, {bool isError = false}) {
         if (isError || Get.isLogEnable) {
@@ -36,7 +36,38 @@ void main() {
 
       theme: theme.toApproximateMaterialTheme(),
       home: FScaffold(
-        header: AppBar(title: const Text('美元/人民币理财对比')),
+        header: AppBar(
+          title: const Text('USDer - 美元/人民币理财对比'),
+          actions: [
+            PopupMenuButton(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: const Icon(FIcons.ellipsis),
+              ),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: 1,
+                    child: Text('Gridder - 网格交易测试工具'),
+                    onTap: () => launchUrlString('https://x.p1gd0g.cc'),
+                  ),
+                  PopupMenuItem(
+                    value: 2,
+                    child: Text('ATRx - ETF 波动对比'),
+                    onTap: () => launchUrlString('https://x.p1gd0g.cc'),
+                  ),
+                  PopupMenuItem(
+                    value: 3,
+                    child: Text('关注作者 @p1gd0g'),
+                    onTap: () => launchUrlString(
+                      'https://mp.weixin.qq.com/s/yoFS-PvjhuvyNDBxZNO9Vg',
+                    ),
+                  ),
+                ];
+              },
+            ),
+          ],
+        ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -72,14 +103,14 @@ void main() {
 
               FTextField(
                 control: FTextFieldControl.managed(
-                  controller: con.curRateInputCon,
+                  controller: con.curExchangeInputCon,
                 ),
                 label: const Text('当前美元/人民币汇率'),
                 keyboardType: .number,
                 onTap: () {
-                  con.curRateInputCon.selection = TextSelection(
+                  con.curExchangeInputCon.selection = TextSelection(
                     baseOffset: 0,
-                    extentOffset: con.curRateInputCon.text.length,
+                    extentOffset: con.curExchangeInputCon.text.length,
                   );
                 },
               ),
@@ -106,14 +137,14 @@ void main() {
               ),
               FTextField(
                 control: FTextFieldControl.managed(
-                  controller: con.finalRateInputCon,
+                  controller: con.finalExchangeInputCon,
                 ),
                 label: const Text('到期日美元/人民币汇率'),
                 keyboardType: .number,
                 onTap: () {
-                  con.finalRateInputCon.selection = TextSelection(
+                  con.finalExchangeInputCon.selection = TextSelection(
                     baseOffset: 0,
-                    extentOffset: con.finalRateInputCon.text.length,
+                    extentOffset: con.finalExchangeInputCon.text.length,
                   );
                 },
               ),
@@ -123,7 +154,7 @@ void main() {
                   con.calc.value++;
                 },
                 prefix: const Icon(FIcons.calculator),
-                child: const Text('计算'),
+                child: const Text('计算收益（不构成投资建议）'),
               ),
 
               Obx(() {
@@ -132,7 +163,7 @@ void main() {
                 }
 
                 Get.log('input, ${con.assetInputCon.text}');
-                return FCard();
+                return Result();
               }),
             ],
           ),
