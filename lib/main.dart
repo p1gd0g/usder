@@ -22,7 +22,9 @@ void main() {
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
-
+      locale: const Locale('zh'),
+      supportedLocales: FLocalizations.supportedLocales,
+      localizationsDelegates: FLocalizations.localizationsDelegates,
       logWriterCallback: (value, {isError = false}) {
         // void defaultLogWriterCallback(String value, {bool isError = false}) {
         if (isError || Get.isLogEnable) {

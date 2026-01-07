@@ -10,7 +10,7 @@ class Result extends StatelessWidget {
   Widget build(BuildContext context) {
     final con = Get.put(Con());
 
-    final usd = con.usdProfit();
+    final usd = con.usdProfitWithExchange();
 
     return Column(
       spacing: 16,
@@ -22,6 +22,7 @@ class Result extends StatelessWidget {
         ),
         FCard(
           title: const Text('美元理财收益'),
+          subtitle: Text('投资 ${con.usdAsset} 美元'),
           mainAxisSize: MainAxisSize.max,
 
           child: Text('\$ ${usd.$1}'),
