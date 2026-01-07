@@ -42,6 +42,15 @@ class Con extends GetxController {
     return usdAsset.toPrecision(3);
   }
 
+  double usdExchangePnL() {
+    final curExchange = double.tryParse(curExchangeInputCon.text) ?? 1;
+    final finalExchange = double.tryParse(finalExchangeInputCon.text) ?? 1;
+
+    final pnl = usdAsset * (finalExchange - curExchange);
+
+    return pnl.toPrecision(3);
+  }
+
   double rmbProfit() {
     final rmbAsset = double.tryParse(assetInputCon.text) ?? 0;
     final rmbRate = double.tryParse(rmbRateInputCon.text) ?? 0;

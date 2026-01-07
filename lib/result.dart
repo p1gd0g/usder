@@ -13,24 +13,60 @@ class Result extends StatelessWidget {
     final usd = con.usdProfitWithExchange();
 
     return Column(
-      spacing: 16,
+      // spacing: 16,
       children: [
-        FCard(
-          title: const Text('人民币理财收益'),
-          mainAxisSize: MainAxisSize.max,
-          child: Text('￥${con.rmbProfit()}'),
-        ),
-        FCard(
-          title: const Text('美元理财收益'),
-          subtitle: Text('投资 ${con.usdAsset} 美元'),
-          mainAxisSize: MainAxisSize.max,
-
-          child: Text('\$ ${usd.$1}'),
-        ),
-        FCard(
-          title: const Text('美元理财折合人民币收益'),
-          mainAxisSize: MainAxisSize.max,
-          child: Text('￥ ${usd.$2}'),
+        FCard(title: const Text('人民币理财收益'), child: Text('￥${con.rmbProfit()}')),
+        FDivider(),
+        if (Get.width > Get.height)
+          Row(
+            mainAxisAlignment: .center,
+            spacing: 16,
+            children: [
+              FCard(
+                title: const Text('美元汇率盈亏'),
+                subtitle: Text('本金 \$ ${con.usdAsset}'),
+                child: Text('￥${con.usdExchangePnL()}'),
+              ),
+              Icon(FIcons.plus),
+              FCard(
+                title: const Text('美元理财收益'),
+                subtitle: Text('\$ ${usd.$1}'),
+                child: Text('￥${usd.$2}'),
+              ),
+            ],
+          )
+        else ...[
+          FCard(
+            title: const Text('美元汇率盈亏'),
+            subtitle: Text('本金 \$ ${con.usdAsset}'),
+            child: Text('￥${con.usdExchangePnL()}'),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: .center,
+            spacing: 16,
+            children: [
+              Icon(FIcons.plus),
+              FCard(
+                title: const Text('美元理财收益'),
+                subtitle: Text('\$ ${usd.$1}'),
+                child: Text('￥${usd.$2}'),
+              ),
+            ],
+          ),
+        ],
+        SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: .center,
+          spacing: 16,
+          children: [
+            Icon(FIcons.equal),
+            FCard(
+              title: const Text('总盈亏'),
+              subtitle: Text('\$ ${(usd.$1 + con.usdAsset).toPrecision(3)}'),
+              child: Text('￥${(usd.$2 + con.usdExchangePnL()).toPrecision(3)}'),
+            ),
+          ],
         ),
       ],
     );
