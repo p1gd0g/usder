@@ -27,6 +27,8 @@ class Con extends GetxController {
     date: DateTime.now().add(const Duration(days: 365)),
   );
 
+  final TextEditingController daysInputCon = TextEditingController(text: '365');
+
   var calc = 0.obs;
 
   int get profitDays {

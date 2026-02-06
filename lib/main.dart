@@ -38,34 +38,62 @@ void main() {
 
       theme: theme.toApproximateMaterialTheme(),
       home: FScaffold(
-        header: AppBar(
+        header: FHeader(
           title: const Text('USDer - 美元/人民币理财对比'),
-          actions: [
-            PopupMenuButton(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Icon(FIcons.ellipsis),
-              ),
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text('Gridder - 网格交易测试工具'),
-                    onTap: () => launchUrlString('https://x.p1gd0g.cc'),
-                  ),
-                  PopupMenuItem(
-                    value: 2,
-                    child: Text('ATRx - ETF 波动对比'),
-                    onTap: () => launchUrlString('https://x.p1gd0g.cc'),
-                  ),
-                  PopupMenuItem(
-                    value: 3,
-                    child: Text('关注作者 @p1gd0g'),
-                    onTap: () => launchUrlString(
-                      'https://mp.weixin.qq.com/s/yoFS-PvjhuvyNDBxZNO9Vg',
+          suffixes: [
+            FPopoverMenu.tiles(
+              // child: Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: const Icon(FIcons.ellipsis),
+              // ),
+              // itemBuilder: (context) {
+              //   return [
+              //     PopupMenuItem(
+              //       value: 1,
+              //       child: Text('Gridder - 网格交易测试工具'),
+              //       onTap: () => launchUrlString('https://x.p1gd0g.cc'),
+              //     ),
+              //     PopupMenuItem(
+              //       value: 2,
+              //       child: Text('ATRx - ETF 波动对比'),
+              //       onTap: () => launchUrlString('https://x.p1gd0g.cc'),
+              //     ),
+              //     PopupMenuItem(
+              //       value: 3,
+              //       child: Text('关注作者 @p1gd0g'),
+              //       onTap: () => launchUrlString(
+              //         'https://mp.weixin.qq.com/s/yoFS-PvjhuvyNDBxZNO9Vg',
+              //       ),
+              //     ),
+              //   ];
+              // },
+              menu: [
+                FTileGroup(
+                  children: [
+                    FTile(
+                      title: const Text('Gridder - 网格交易测试工具'),
+                      onPress: () => launchUrlString('https://x.p1gd0g.cc'),
                     ),
-                  ),
-                ];
+                    FTile(
+                      title: const Text('ATRx - ETF 波动对比'),
+                      onPress: () => launchUrlString('https://x.p1gd0g.cc'),
+                    ),
+                    FTile(
+                      title: const Text('关注作者 @p1gd0g'),
+                      onPress: () => launchUrlString(
+                        'https://mp.weixin.qq.com/s/yoFS-PvjhuvyNDBxZNO9Vg',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              builder: (context, value, child) {
+                return FHeaderAction(
+                  icon: Icon(FIcons.ellipsis),
+                  onPress: () {
+                    value.toggle();
+                  },
+                );
               },
             ),
           ],
@@ -130,13 +158,36 @@ void main() {
                   );
                 },
               ),
-
-              FDateField.calendar(
-                label: const Text('到期日'),
-                control: FDateFieldControl.managed(
-                  controller: con.finalDateInputCon,
-                ),
+              FTabs(
+                children: [
+                  FTabEntry(
+                    label: Text('按到期日'),
+                    child: FDateField.calendar(
+                      label: const Text('到期日'),
+                      control: FDateFieldControl.managed(
+                        controller: con.finalDateInputCon,
+                      ),
+                    ),
+                  ),
+                  FTabEntry(
+                    label: Text('按天数'),
+                    child: FTextField(
+                      control: FTextFieldControl.managed(
+                        controller: con.daysInputCon,
+                      ),
+                      label: const Text('投资天数'),
+                      keyboardType: .number,
+                      onTap: () {
+                        con.daysInputCon.selection = TextSelection(
+                          baseOffset: 0,
+                          extentOffset: con.daysInputCon.text.length,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
+
               FTextField(
                 control: FTextFieldControl.managed(
                   controller: con.finalExchangeInputCon,
