@@ -159,6 +159,10 @@ void main() {
                 },
               ),
               FTabs(
+                control: FTabControl.managed(initial: 0),
+                onPress: (value) {
+                  con.tabIndex = value;
+                },
                 children: [
                   FTabEntry(
                     label: Text('按到期日'),

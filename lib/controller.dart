@@ -3,6 +3,8 @@ import 'package:forui/forui.dart';
 import 'package:get/get.dart';
 
 class Con extends GetxController {
+  int tabIndex = 0;
+
   final TextEditingController assetInputCon = TextEditingController(
     text: '10000',
   );
@@ -32,6 +34,10 @@ class Con extends GetxController {
   var calc = 0.obs;
 
   int get profitDays {
+    if (tabIndex == 1) {
+      return int.tryParse(daysInputCon.text) ?? 0;
+    }
+
     return (finalDateInputCon.value?.difference(DateTime.now()).inDays ?? 0) +
         1;
   }
