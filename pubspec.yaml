@@ -37,13 +37,14 @@ dependencies:
   get: ^4.7.2
   shared_preferences: ^2.5.3
   flex_color_scheme: ^8.2.0
-  package_info_plus: ^8.3.0
+  package_info_plus: ^9.0.0
   firebase_core: ^4.0.0
   flutter_launcher_icons: ^0.14.4
   firebase_analytics: ^12.0.0
   stack_trace: ^1.12.1
-  forui: ^0.17.0
+  forui: ^0.19.0
   url_launcher: ^6.3.2
+  posthog_flutter: ^5.15.2
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +55,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

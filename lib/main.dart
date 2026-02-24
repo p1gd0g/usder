@@ -6,6 +6,7 @@ import 'package:myapp/result.dart';
 import 'dart:developer' as developer;
 import 'package:stack_trace/stack_trace.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ void main() {
 
   runApp(
     GetMaterialApp(
+      navigatorObservers: [PosthogObserver()],
       debugShowCheckedModeBanner: false,
       locale: const Locale('zh'),
       supportedLocales: FLocalizations.supportedLocales,
@@ -42,31 +44,6 @@ void main() {
           title: const Text('USDer - 美元/人民币理财对比'),
           suffixes: [
             FPopoverMenu.tiles(
-              // child: Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: const Icon(FIcons.ellipsis),
-              // ),
-              // itemBuilder: (context) {
-              //   return [
-              //     PopupMenuItem(
-              //       value: 1,
-              //       child: Text('Gridder - 网格交易测试工具'),
-              //       onTap: () => launchUrlString('https://x.p1gd0g.cc'),
-              //     ),
-              //     PopupMenuItem(
-              //       value: 2,
-              //       child: Text('ATRx - ETF 波动对比'),
-              //       onTap: () => launchUrlString('https://x.p1gd0g.cc'),
-              //     ),
-              //     PopupMenuItem(
-              //       value: 3,
-              //       child: Text('关注作者 @p1gd0g'),
-              //       onTap: () => launchUrlString(
-              //         'https://mp.weixin.qq.com/s/yoFS-PvjhuvyNDBxZNO9Vg',
-              //       ),
-              //     ),
-              //   ];
-              // },
               menu: [
                 FTileGroup(
                   children: [
