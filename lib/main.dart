@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:get/get.dart';
+import 'package:myapp/conn.dart';
 import 'package:myapp/controller.dart';
 import 'package:myapp/result.dart';
 import 'dart:developer' as developer;
@@ -19,6 +20,8 @@ void main() {
 
   final theme = FThemes.zinc.dark;
   final con = Get.put(Con());
+
+  final conn = Get.put(Conn());
 
   runApp(
     GetMaterialApp(
@@ -108,16 +111,30 @@ void main() {
                 },
               ),
 
-              FTextField(
-                control: FTextFieldControl.managed(
-                  controller: con.curExchangeInputCon,
-                ),
-                label: const Text('当前美元/人民币汇率'),
-                keyboardType: .number,
-                onTap: () {
-                  con.curExchangeInputCon.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: con.curExchangeInputCon.text.length,
+              FutureBuilder<double>(
+                future: conn.getRfxSpQuot(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != .done) {
+                    return const FCircularProgress();
+                  }
+
+                  if (snapshot.data == null || snapshot.data == 0) {
+                  } else {
+                    con.curExchangeInputCon.text = snapshot.data!.toString();
+                  }
+
+                  return FTextField(
+                    control: FTextFieldControl.managed(
+                      controller: con.curExchangeInputCon,
+                    ),
+                    label: const Text('当前美元/人民币汇率'),
+                    keyboardType: .number,
+                    onTap: () {
+                      con.curExchangeInputCon.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: con.curExchangeInputCon.text.length,
+                      );
+                    },
                   );
                 },
               ),
