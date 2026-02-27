@@ -111,16 +111,16 @@ void main() {
                 },
               ),
 
-              FutureBuilder<double>(
+              FutureBuilder<String>(
                 future: conn.getRfxSpQuot(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState != .done) {
                     return const FCircularProgress();
                   }
 
-                  if (snapshot.data == null || snapshot.data == 0) {
+                  if (snapshot.data == null || snapshot.data!.isEmpty) {
                   } else {
-                    con.curExchangeInputCon.text = snapshot.data!.toString();
+                    con.curExchangeInputCon.text = snapshot.data!;
                   }
 
                   return FTextField(
@@ -139,19 +139,34 @@ void main() {
                 },
               ),
 
-              FTextField(
-                control: FTextFieldControl.managed(
-                  controller: con.usdRateInputCon,
-                ),
-                label: const Text('美元年化利率（%）'),
-                keyboardType: .number,
-                onTap: () {
-                  con.usdRateInputCon.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: con.usdRateInputCon.text.length,
+              FutureBuilder<String>(
+                future: conn.getUsdRate(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != .done) {
+                    return const FCircularProgress();
+                  }
+
+                  if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  } else {
+                    con.usdRateInputCon.text = snapshot.data!;
+                  }
+
+                  return FTextField(
+                    control: FTextFieldControl.managed(
+                      controller: con.usdRateInputCon,
+                    ),
+                    label: const Text('美元年化利率（%）'),
+                    keyboardType: .number,
+                    onTap: () {
+                      con.usdRateInputCon.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: con.usdRateInputCon.text.length,
+                      );
+                    },
                   );
                 },
               ),
+
               FTabs(
                 control: FTabControl.managed(initial: 0),
                 onPress: (value) {
