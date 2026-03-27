@@ -10,7 +10,7 @@ extension NumPrecision on num {
 }
 
 @Riverpod(keepAlive: true)
-class Con extends _$Con {
+class Ctrl extends _$Ctrl {
   @override
   int build() => 0;
 

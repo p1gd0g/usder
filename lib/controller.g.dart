@@ -9,10 +9,10 @@ part of 'controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(Con)
+@ProviderFor(Ctrl)
 final conProvider = ConProvider._();
 
-final class ConProvider extends $NotifierProvider<Con, int> {
+final class ConProvider extends $NotifierProvider<Ctrl, int> {
   ConProvider._()
     : super(
         from: null,
@@ -29,7 +29,7 @@ final class ConProvider extends $NotifierProvider<Con, int> {
 
   @$internal
   @override
-  Con create() => Con();
+  Ctrl create() => Ctrl();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(int value) {
@@ -42,7 +42,7 @@ final class ConProvider extends $NotifierProvider<Con, int> {
 
 String _$conHash() => r'e9fd9c74f903df43c9e6432a91fbb641e3275dcf';
 
-abstract class _$Con extends $Notifier<int> {
+abstract class _$Ctrl extends $Notifier<int> {
   int build();
   @$mustCallSuper
   @override
