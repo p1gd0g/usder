@@ -10,9 +10,10 @@ extension NumPrecision on num {
 }
 
 @Riverpod(keepAlive: true)
-class Con extends _$Con with ChangeNotifier {
+class Con extends _$Con {
   @override
-  Con build() => this;
+  int build() => 0;
+
   int tabIndex = 0;
 
   final TextEditingController assetInputCon = TextEditingController(
@@ -41,11 +42,8 @@ class Con extends _$Con with ChangeNotifier {
 
   final TextEditingController daysInputCon = TextEditingController(text: '365');
 
-  int calc = 0;
-
   void incrementCalc() {
-    calc++;
-    notifyListeners();
+    state++;
   }
 
   int get profitDays {

@@ -12,7 +12,7 @@ part of 'controller.dart';
 @ProviderFor(Con)
 final conProvider = ConProvider._();
 
-final class ConProvider extends $NotifierProvider<Con, Con> {
+final class ConProvider extends $NotifierProvider<Con, int> {
   ConProvider._()
     : super(
         from: null,
@@ -32,27 +32,27 @@ final class ConProvider extends $NotifierProvider<Con, Con> {
   Con create() => Con();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Con value) {
+  Override overrideWithValue(int value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<Con>(value),
+      providerOverride: $SyncValueProvider<int>(value),
     );
   }
 }
 
-String _$conHash() => r'842820aaf5915f666e723f6286bc39dc5a86b19f';
+String _$conHash() => r'e9fd9c74f903df43c9e6432a91fbb641e3275dcf';
 
-abstract class _$Con extends $Notifier<Con> {
-  Con build();
+abstract class _$Con extends $Notifier<int> {
+  int build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<Con, Con>;
+    final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<Con, Con>,
-              Con,
+              AnyNotifier<int, int>,
+              int,
               Object?,
               Object?
             >;

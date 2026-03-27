@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
-import 'package:myapp/app_logger.dart';
 import 'package:myapp/conn.dart';
 import 'package:myapp/controller.dart';
 import 'package:myapp/result.dart';
@@ -16,6 +15,10 @@ void main() {
   runApp(
     ProviderScope(
       child: MaterialApp(
+        builder: (context, child) {
+          final typography = FThemeBuildContext(context).theme.typography;
+          return DefaultTextStyle(style: typography.base, child: child!);
+        },
         navigatorObservers: [PosthogObserver()],
         debugShowCheckedModeBanner: false,
         locale: const Locale('zh'),
@@ -33,8 +36,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final con = ref.watch(conProvider);
-    final conn = ref.read(connProvider);
+    final con = ref.read(conProvider.notifier);
 
     return FScaffold(
       header: FHeader(
@@ -103,56 +105,68 @@ class HomePage extends ConsumerWidget {
               },
             ),
 
-            FutureBuilder<String>(
-              future: conn.getRfxSpQuot(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != .done) {
-                  return const FCircularProgress();
-                }
-
-                if (snapshot.data == null || snapshot.data!.isEmpty) {
-                } else {
-                  con.curExchangeInputCon.text = snapshot.data!;
-                }
-
-                return FTextField(
-                  control: FTextFieldControl.managed(
-                    controller: con.curExchangeInputCon,
+            Consumer(
+              builder: (context, ref, child) {
+                final asyncValue = ref.watch(rfxSpQuotProvider);
+                return asyncValue.when(
+                  loading: () => const FCircularProgress(),
+                  error: (e, _) => FTextField(
+                    control: FTextFieldControl.managed(
+                      controller: con.curExchangeInputCon,
+                    ),
+                    label: const Text('当前美元/人民币汇率'),
+                    keyboardType: .number,
                   ),
-                  label: const Text('当前美元/人民币汇率'),
-                  keyboardType: .number,
-                  onTap: () {
-                    con.curExchangeInputCon.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: con.curExchangeInputCon.text.length,
+                  data: (value) {
+                    if (value.isNotEmpty) {
+                      con.curExchangeInputCon.text = value;
+                    }
+                    return FTextField(
+                      control: FTextFieldControl.managed(
+                        controller: con.curExchangeInputCon,
+                      ),
+                      label: const Text('当前美元/人民币汇率'),
+                      keyboardType: .number,
+                      onTap: () {
+                        con.curExchangeInputCon.selection = TextSelection(
+                          baseOffset: 0,
+                          extentOffset: con.curExchangeInputCon.text.length,
+                        );
+                      },
                     );
                   },
                 );
               },
             ),
 
-            FutureBuilder<String>(
-              future: conn.getUsdRate(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != .done) {
-                  return const FCircularProgress();
-                }
-
-                if (snapshot.data == null || snapshot.data!.isEmpty) {
-                } else {
-                  con.usdRateInputCon.text = snapshot.data!;
-                }
-
-                return FTextField(
-                  control: FTextFieldControl.managed(
-                    controller: con.usdRateInputCon,
+            Consumer(
+              builder: (context, ref, child) {
+                final asyncValue = ref.watch(usdRateProvider);
+                return asyncValue.when(
+                  loading: () => const FCircularProgress(),
+                  error: (e, _) => FTextField(
+                    control: FTextFieldControl.managed(
+                      controller: con.usdRateInputCon,
+                    ),
+                    label: const Text('美元年化利率（%）'),
+                    keyboardType: .number,
                   ),
-                  label: const Text('美元年化利率（%）'),
-                  keyboardType: .number,
-                  onTap: () {
-                    con.usdRateInputCon.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: con.usdRateInputCon.text.length,
+                  data: (value) {
+                    if (value.isNotEmpty) {
+                      con.usdRateInputCon.text = value;
+                    }
+                    return FTextField(
+                      control: FTextFieldControl.managed(
+                        controller: con.usdRateInputCon,
+                      ),
+                      label: const Text('美元年化利率（%）'),
+                      keyboardType: .number,
+                      onTap: () {
+                        con.usdRateInputCon.selection = TextSelection(
+                          baseOffset: 0,
+                          extentOffset: con.usdRateInputCon.text.length,
+                        );
+                      },
                     );
                   },
                 );
@@ -215,16 +229,26 @@ class HomePage extends ConsumerWidget {
               child: const Text('计算收益（不构成投资建议）'),
             ),
 
-            Builder(
-              builder: (context) {
-                if (con.calc == 0) {
-                  return const SizedBox();
+            Consumer(
+              builder: (context, ref, child) {
+                final calc = ref.watch(conProvider);
+                if (calc == 0) {
+                  return const SizedBox.shrink();
                 }
-
-                appLogger.i('input, ${con.assetInputCon.text}');
                 return const Result();
               },
             ),
+
+            // if (calc == 0)
+            //   const SizedBox()
+            // else ...[
+            //   Builder(
+            //     builder: (context) {
+            //       appLogger.i('input, ${con.assetInputCon.text}');
+            //       return const Result();
+            //     },
+            //   ),
+            // ],
           ],
         ),
       ),

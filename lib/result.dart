@@ -8,7 +8,7 @@ class Result extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final con = ref.read(conProvider);
+    final con = ref.read(conProvider.notifier);
 
     final usd = con.usdProfitWithExchange();
     final size = MediaQuery.of(context).size;

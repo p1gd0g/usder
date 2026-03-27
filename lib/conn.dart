@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:myapp/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,6 +14,8 @@ class Conn {
   static const String _corsHost = 'https://cors.p1gd0g.cc';
 
   Future<String> getRfxSpQuot() async {
+    appLogger.d('Fetching RfxSpQuot from $_rfxSpQuot');
+
     final uri = Uri.parse(
       _corsHost,
     ).replace(queryParameters: {'url': _rfxSpQuot});
@@ -23,6 +26,8 @@ class Conn {
   }
 
   Future<String> getUsdRate() async {
+    appLogger.d('Fetching UsdRate from $_usdRate');
+
     final uri = Uri.parse(
       _corsHost,
     ).replace(queryParameters: {'url': _usdRate});
@@ -35,6 +40,12 @@ class Conn {
 
 @riverpod
 Conn conn(Ref ref) => Conn();
+
+@riverpod
+Future<String> rfxSpQuot(Ref ref) => ref.read(connProvider).getRfxSpQuot();
+
+@riverpod
+Future<String> usdRate(Ref ref) => ref.read(connProvider).getUsdRate();
 
 class UsdRateJson {
   String? sevenDayAnnualization;
