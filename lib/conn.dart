@@ -1,41 +1,40 @@
-import 'package:get/get.dart';
+import 'dart:convert';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:http/http.dart' as http;
 
-class Conn extends GetConnect {
-  String rfxSpQuot =
+part 'conn.g.dart';
+
+class Conn {
+  static const String _rfxSpQuot =
       'https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/rfx-sp-quot.json';
 
-  // 美元利率
-  String usdRate =
+  static const String _usdRate =
       'https://www.bocwm.cn/webApi/cms/productNetWorth/getNetWorthImageByCode?productCode=RJHQDUSD01A&dayCount=5';
-  String corsHost = 'https://cors.p1gd0g.cc';
+  static const String _corsHost = 'https://cors.p1gd0g.cc';
 
-  // https://cors.p1gd0g.cc?url=https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/rfx-sp-quot.json
   Future<String> getRfxSpQuot() async {
-    final rsp = await get<String>(
-      corsHost,
-      query: {'url': rfxSpQuot},
-      decoder: (data) {
-        final json = RfxSpQuotJson.fromJson(data);
-        return (json.records!.first.bidPrc!);
-      },
-    );
-    return rsp.body!;
+    final uri = Uri.parse(
+      _corsHost,
+    ).replace(queryParameters: {'url': _rfxSpQuot});
+    final rsp = await http.get(uri);
+    final data = jsonDecode(rsp.body);
+    final json = RfxSpQuotJson.fromJson(data);
+    return json.records!.first.bidPrc!;
   }
-
-  // https://www.bocwm.cn/webApi/cms/productNetWorth/getNetWorthImageByCode?productCode=RJHQDUSD01A&dayCount=5
 
   Future<String> getUsdRate() async {
-    final rsp = await get<String>(
-      corsHost,
-      query: {'url': usdRate},
-      decoder: (data) {
-        final json = UsdRateJson.fromJson(data);
-        return (json.sevenDayAnnualization!);
-      },
-    );
-    return rsp.body!;
+    final uri = Uri.parse(
+      _corsHost,
+    ).replace(queryParameters: {'url': _usdRate});
+    final rsp = await http.get(uri);
+    final data = jsonDecode(rsp.body);
+    final json = UsdRateJson.fromJson(data);
+    return json.sevenDayAnnualization!;
   }
 }
+
+@riverpod
+Conn conn(Ref ref) => Conn();
 
 class UsdRateJson {
   String? sevenDayAnnualization;

@@ -1,8 +1,18 @@
 import 'package:flutter/widgets.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:forui/forui.dart';
-import 'package:get/get.dart';
 
-class Con extends GetxController {
+part 'controller.g.dart';
+
+extension NumPrecision on num {
+  double toPrecision(int fractionDigits) =>
+      double.parse(toStringAsFixed(fractionDigits));
+}
+
+@Riverpod(keepAlive: true)
+class Con extends _$Con with ChangeNotifier {
+  @override
+  Con build() => this;
   int tabIndex = 0;
 
   final TextEditingController assetInputCon = TextEditingController(
@@ -31,7 +41,12 @@ class Con extends GetxController {
 
   final TextEditingController daysInputCon = TextEditingController(text: '365');
 
-  var calc = 0.obs;
+  int calc = 0;
+
+  void incrementCalc() {
+    calc++;
+    notifyListeners();
+  }
 
   int get profitDays {
     if (tabIndex == 1) {
