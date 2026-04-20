@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
@@ -10,14 +11,20 @@ import 'package:posthog_flutter/posthog_flutter.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final theme = FThemes.zinc.dark;
-
+  final theme =
+      const <TargetPlatform>{
+        .android,
+        .iOS,
+        .fuchsia,
+      }.contains(defaultTargetPlatform)
+      ? FThemes.neutral.dark.touch
+      : FThemes.neutral.dark.desktop;
   runApp(
     ProviderScope(
       child: MaterialApp(
         builder: (context, child) {
           final typography = FThemeBuildContext(context).theme.typography;
-          return DefaultTextStyle(style: typography.base, child: child!);
+          return DefaultTextStyle(style: typography.md, child: child!);
         },
         navigatorObservers: [PosthogObserver()],
         debugShowCheckedModeBanner: false,
@@ -180,15 +187,6 @@ class HomePage extends ConsumerWidget {
               },
               children: [
                 FTabEntry(
-                  label: Text('按到期日'),
-                  child: FDateField.calendar(
-                    label: const Text('到期日'),
-                    control: FDateFieldControl.managed(
-                      controller: con.finalDateInputCon,
-                    ),
-                  ),
-                ),
-                FTabEntry(
                   label: Text('按天数'),
                   child: FTextField(
                     control: FTextFieldControl.managed(
@@ -202,6 +200,15 @@ class HomePage extends ConsumerWidget {
                         extentOffset: con.daysInputCon.text.length,
                       );
                     },
+                  ),
+                ),
+                FTabEntry(
+                  label: Text('按到期日'),
+                  child: FDateField.calendar(
+                    label: const Text('到期日'),
+                    control: FDateFieldControl.managed(
+                      controller: con.finalDateInputCon,
+                    ),
                   ),
                 ),
               ],
