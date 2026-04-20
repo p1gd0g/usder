@@ -82,6 +82,7 @@ class HomePage extends ConsumerWidget {
         ],
       ),
       child: SingleChildScrollView(
+        controller: con.scrollCon,
         padding: const EdgeInsets.all(16),
         child: Column(
           spacing: 16,

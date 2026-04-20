@@ -42,8 +42,17 @@ class Ctrl extends _$Ctrl {
 
   final TextEditingController daysInputCon = TextEditingController(text: '365');
 
+  final ScrollController scrollCon = ScrollController();
+
   void incrementCalc() {
     state++;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollCon.animateTo(
+        scrollCon.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   int get profitDays {
