@@ -8,6 +8,7 @@ class Result extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(conProvider); // 订阅 state 变化，触发 rebuild
     final con = ref.read(conProvider.notifier);
 
     final usd = con.usdProfitWithExchange();
@@ -72,6 +73,20 @@ class Result extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+        SizedBox(height: 16),
+        FCard(
+          title: const Text('调整到期日汇率'),
+          child: FSlider(
+            // label: Text(
+            //   '到期日美元/人民币汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
+            // ),
+            control: FSliderControl.managedContinuous(
+              controller: con.finalExchangeSliderCon,
+              onChange: (_) => ref.read(conProvider.notifier).refreshCalc(),
+            ),
+            tooltipBuilder: (_, v) => Text((6.0 + v * 2.0).toStringAsFixed(2)),
+          ),
         ),
       ],
     );

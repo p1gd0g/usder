@@ -215,20 +215,6 @@ class HomePage extends ConsumerWidget {
               ],
             ),
 
-            FTextField(
-              control: FTextFieldControl.managed(
-                controller: con.finalExchangeInputCon,
-              ),
-              label: const Text('到期日美元/人民币汇率'),
-              keyboardType: .number,
-              onTap: () {
-                con.finalExchangeInputCon.selection = TextSelection(
-                  baseOffset: 0,
-                  extentOffset: con.finalExchangeInputCon.text.length,
-                );
-              },
-            ),
-
             FButton(
               onPress: () {
                 con.incrementCalc();

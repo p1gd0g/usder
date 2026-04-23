@@ -22,9 +22,16 @@ class Ctrl extends _$Ctrl {
   final TextEditingController curExchangeInputCon = TextEditingController(
     text: '7.0',
   );
-  final TextEditingController finalExchangeInputCon = TextEditingController(
-    text: '7.0',
-  );
+  // 到期日汇率滑块（6.0~8.0，百分比 = (rate-6)/2）
+  // 初始汇率 7.0 对应 max = 0.5
+  final FContinuousSliderController finalExchangeSliderCon =
+      FContinuousSliderController(
+        value: FSliderValue(max: 0.5),
+        stepPercentage: 0.01,
+      );
+
+  double get finalExchangeFromSlider =>
+      6.0 + finalExchangeSliderCon.value.max * 2.0;
 
   // rmb 年化利率
   final TextEditingController rmbRateInputCon = TextEditingController(
@@ -55,6 +62,10 @@ class Ctrl extends _$Ctrl {
     });
   }
 
+  void refreshCalc() {
+    state++;
+  }
+
   int get profitDays {
     if (tabIndex == 1) {
       return int.tryParse(daysInputCon.text) ?? 0;
@@ -74,7 +85,7 @@ class Ctrl extends _$Ctrl {
 
   double usdExchangePnL() {
     final curExchange = double.tryParse(curExchangeInputCon.text) ?? 1;
-    final finalExchange = double.tryParse(finalExchangeInputCon.text) ?? 1;
+    final finalExchange = finalExchangeFromSlider;
 
     final pnl = usdAsset * (finalExchange - curExchange);
 
@@ -93,7 +104,7 @@ class Ctrl extends _$Ctrl {
   }
 
   ({double usdProfit, double rmbEquivalent}) usdProfitWithExchange() {
-    final finalExchange = double.tryParse(finalExchangeInputCon.text) ?? 1;
+    final finalExchange = finalExchangeFromSlider;
     final usdRate = double.tryParse(usdRateInputCon.text) ?? 0;
 
     final days = profitDays.toDouble();
