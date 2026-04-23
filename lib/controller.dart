@@ -92,7 +92,7 @@ class Ctrl extends _$Ctrl {
     return rmbProfit.toPrecision(3);
   }
 
-  (double, double) usdProfitWithExchange() {
+  ({double usdProfit, double rmbEquivalent}) usdProfitWithExchange() {
     final finalExchange = double.tryParse(finalExchangeInputCon.text) ?? 1;
     final usdRate = double.tryParse(usdRateInputCon.text) ?? 0;
 
@@ -101,8 +101,8 @@ class Ctrl extends _$Ctrl {
     final usdProfit = usdAsset * usdRate / 100 * days / 365;
 
     return (
-      usdProfit.toPrecision(3),
-      (usdProfit * finalExchange).toPrecision(3),
+      usdProfit: usdProfit.toPrecision(3),
+      rmbEquivalent: (usdProfit * finalExchange).toPrecision(3),
     );
   }
 }

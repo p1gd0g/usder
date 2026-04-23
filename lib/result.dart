@@ -11,10 +11,10 @@ class Result extends ConsumerWidget {
     final con = ref.read(conProvider.notifier);
 
     final usd = con.usdProfitWithExchange();
+
     final size = MediaQuery.of(context).size;
 
     return Column(
-      // spacing: 16,
       children: [
         FCard(title: const Text('人民币理财收益'), child: Text('￥${con.rmbProfit()}')),
         FDivider(),
@@ -31,8 +31,8 @@ class Result extends ConsumerWidget {
               Icon(FIcons.plus, size: 48),
               FCard(
                 title: const Text('美元理财收益'),
-                subtitle: Text('\$ ${usd.$1}'),
-                child: Text('￥${usd.$2}'),
+                subtitle: Text('\$ ${usd.usdProfit}'),
+                child: Text('￥${usd.rmbEquivalent}'),
               ),
             ],
           )
@@ -50,8 +50,8 @@ class Result extends ConsumerWidget {
               Icon(FIcons.plus, size: 48),
               FCard(
                 title: const Text('美元理财收益'),
-                subtitle: Text('\$ ${usd.$1}'),
-                child: Text('￥${usd.$2}'),
+                subtitle: Text('\$ ${usd.usdProfit}'),
+                child: Text('￥${usd.rmbEquivalent}'),
               ),
             ],
           ),
@@ -64,8 +64,12 @@ class Result extends ConsumerWidget {
             Icon(FIcons.equal, size: 48),
             FCard(
               title: const Text('美元理财总盈亏'),
-              subtitle: Text('\$ ${(usd.$1 + con.usdAsset).toPrecision(3)}'),
-              child: Text('￥${(usd.$2 + con.usdExchangePnL()).toPrecision(3)}'),
+              subtitle: Text(
+                '\$ ${(usd.usdProfit + con.usdAsset).toPrecision(3)}',
+              ),
+              child: Text(
+                '￥${(usd.rmbEquivalent + con.usdExchangePnL()).toPrecision(3)}',
+              ),
             ),
           ],
         ),
