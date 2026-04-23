@@ -13,12 +13,17 @@ class Result extends ConsumerWidget {
     final con = ref.read(conProvider.notifier);
 
     final usd = con.usdProfitWithExchange();
+    final rmbProfit = con.rmbProfit();
+    final totalUsdPnl = (usd.rmbEquivalent + con.usdExchangePnL()).toPrecision(
+      3,
+    );
+    final usdWins = totalUsdPnl > rmbProfit;
 
     final size = MediaQuery.of(context).size;
 
     return Column(
       children: [
-        _RmbProfitCard(profit: con.rmbProfit()),
+        _RmbProfitCard(profit: rmbProfit, isWinner: !usdWins),
         FDivider(),
         if (size.width > size.height)
           Row(
@@ -69,6 +74,7 @@ class Result extends ConsumerWidget {
               usdAsset: con.usdAsset,
               rmbEquivalent: usd.rmbEquivalent,
               usdExchangePnL: con.usdExchangePnL(),
+              isWinner: usdWins,
             ),
           ],
         ),
@@ -95,12 +101,17 @@ class Result extends ConsumerWidget {
 
 class _RmbProfitCard extends StatelessWidget {
   final double profit;
+  final bool isWinner;
 
-  const _RmbProfitCard({required this.profit});
+  const _RmbProfitCard({required this.profit, required this.isWinner});
 
   @override
   Widget build(BuildContext context) {
-    return FCard(title: const Text('人民币理财收益'), child: Text('￥$profit'));
+    return FCard(
+      image: isWinner ? FBadge(child: const Text('收益更高 🏆')) : null,
+      title: const Text('人民币理财收益'),
+      child: Text('￥$profit'),
+    );
   }
 }
 
@@ -109,17 +120,20 @@ class _TotalPnlCard extends StatelessWidget {
   final double usdAsset;
   final double rmbEquivalent;
   final double usdExchangePnL;
+  final bool isWinner;
 
   const _TotalPnlCard({
     required this.usdProfit,
     required this.usdAsset,
     required this.rmbEquivalent,
     required this.usdExchangePnL,
+    required this.isWinner,
   });
 
   @override
   Widget build(BuildContext context) {
     return FCard(
+      image: isWinner ? FBadge(child: const Text('收益更高 🏆')) : null,
       title: const Text('美元理财总盈亏'),
       subtitle: Text('\$ ${(usdProfit + usdAsset).toPrecision(3)}'),
       child: Text('￥${(rmbEquivalent + usdExchangePnL).toPrecision(3)}'),
