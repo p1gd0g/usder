@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
@@ -17,7 +18,7 @@ class Result extends ConsumerWidget {
 
     return Column(
       children: [
-        FCard(title: const Text('人民币理财收益'), child: Text('￥${con.rmbProfit()}')),
+        _RmbProfitCard(profit: con.rmbProfit()),
         FDivider(),
         if (size.width > size.height)
           Row(
@@ -63,20 +64,19 @@ class Result extends ConsumerWidget {
           spacing: 16,
           children: [
             Icon(FIcons.equal, size: 48),
-            FCard(
-              title: const Text('美元理财总盈亏'),
-              subtitle: Text(
-                '\$ ${(usd.usdProfit + con.usdAsset).toPrecision(3)}',
-              ),
-              child: Text(
-                '￥${(usd.rmbEquivalent + con.usdExchangePnL()).toPrecision(3)}',
-              ),
+            _TotalPnlCard(
+              usdProfit: usd.usdProfit,
+              usdAsset: con.usdAsset,
+              rmbEquivalent: usd.rmbEquivalent,
+              usdExchangePnL: con.usdExchangePnL(),
             ),
           ],
         ),
         SizedBox(height: 16),
         FCard(
-          title: const Text('调整到期日汇率'),
+          title: Text(
+            '调整到期日汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
+          ),
           child: FSlider(
             // label: Text(
             //   '到期日美元/人民币汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
@@ -89,6 +89,40 @@ class Result extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _RmbProfitCard extends StatelessWidget {
+  final double profit;
+
+  const _RmbProfitCard({required this.profit});
+
+  @override
+  Widget build(BuildContext context) {
+    return FCard(title: const Text('人民币理财收益'), child: Text('￥$profit'));
+  }
+}
+
+class _TotalPnlCard extends StatelessWidget {
+  final double usdProfit;
+  final double usdAsset;
+  final double rmbEquivalent;
+  final double usdExchangePnL;
+
+  const _TotalPnlCard({
+    required this.usdProfit,
+    required this.usdAsset,
+    required this.rmbEquivalent,
+    required this.usdExchangePnL,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FCard(
+      title: const Text('美元理财总盈亏'),
+      subtitle: Text('\$ ${(usdProfit + usdAsset).toPrecision(3)}'),
+      child: Text('￥${(rmbEquivalent + usdExchangePnL).toPrecision(3)}'),
     );
   }
 }
