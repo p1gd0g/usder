@@ -116,7 +116,9 @@ class Result extends ConsumerWidget {
                 // ),
                 control: FSliderControl.managedContinuous(
                   controller: con.finalExchangeSliderCon,
-                  onChange: (_) => ref.read(conProvider.notifier).refreshCalc(),
+                  onChange: (_) => WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => ref.read(conProvider.notifier).refreshCalc(),
+                  ),
                 ),
                 tooltipBuilder: (_, v) =>
                     Text((6.0 + v * 2.0).toStringAsFixed(2)),
