@@ -103,6 +103,19 @@ class Ctrl extends _$Ctrl {
     return rmbProfit.toPrecision(3);
   }
 
+  /// 盈亏平衡点汇率：totalUsdPnl == rmbProfit 时对应的到期日汇率
+  double breakEvenExchangeRate() {
+    final curExchange = double.tryParse(curExchangeInputCon.text) ?? 1;
+    final rmbRate = double.tryParse(rmbRateInputCon.text) ?? 0;
+    final usdRate = double.tryParse(usdRateInputCon.text) ?? 0;
+    final days = profitDays.toDouble();
+
+    final rmbFactor = 1 + rmbRate / 100 * days / 365;
+    final usdFactor = 1 + usdRate / 100 * days / 365;
+
+    return (curExchange * rmbFactor / usdFactor).toPrecision(4);
+  }
+
   ({double usdProfit, double rmbEquivalent}) usdProfitWithExchange() {
     final finalExchange = finalExchangeFromSlider;
     final usdRate = double.tryParse(usdRateInputCon.text) ?? 0;

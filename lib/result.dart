@@ -41,6 +41,21 @@ class Result extends ConsumerWidget {
                 subtitle: Text('\$ ${usd.usdProfit}'),
                 child: Text('￥${usd.rmbEquivalent}'),
               ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: .center,
+                spacing: 16,
+                children: [
+                  Icon(FIcons.equal, size: 48),
+                  _TotalPnlCard(
+                    usdProfit: usd.usdProfit,
+                    usdAsset: con.usdAsset,
+                    rmbEquivalent: usd.rmbEquivalent,
+                    usdExchangePnL: con.usdExchangePnL(),
+                    isWinner: usdWins,
+                  ),
+                ],
+              ),
             ],
           )
         else ...[
@@ -62,37 +77,52 @@ class Result extends ConsumerWidget {
               ),
             ],
           ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: .center,
+            spacing: 16,
+            children: [
+              Icon(FIcons.equal, size: 48),
+              _TotalPnlCard(
+                usdProfit: usd.usdProfit,
+                usdAsset: con.usdAsset,
+                rmbEquivalent: usd.rmbEquivalent,
+                usdExchangePnL: con.usdExchangePnL(),
+                isWinner: usdWins,
+              ),
+            ],
+          ),
         ],
         SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: .center,
-          spacing: 16,
-          children: [
-            Icon(FIcons.equal, size: 48),
-            _TotalPnlCard(
-              usdProfit: usd.usdProfit,
-              usdAsset: con.usdAsset,
-              rmbEquivalent: usd.rmbEquivalent,
-              usdExchangePnL: con.usdExchangePnL(),
-              isWinner: usdWins,
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-        FCard(
-          title: Text(
-            '调整到期日汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
-          ),
-          child: FSlider(
-            // label: Text(
-            //   '到期日美元/人民币汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
-            // ),
-            control: FSliderControl.managedContinuous(
-              controller: con.finalExchangeSliderCon,
-              onChange: (_) => ref.read(conProvider.notifier).refreshCalc(),
-            ),
-            tooltipBuilder: (_, v) => Text((6.0 + v * 2.0).toStringAsFixed(2)),
-          ),
+        Builder(
+          builder: (context) {
+            final breakEven = con.breakEvenExchangeRate();
+            // 滑块范围 6.0~8.0，将汇率转换为 0~1 位置
+            final markPos = ((breakEven - 6.0) / 2.0).clamp(0.0, 1.0);
+            return FCard(
+              title: Text(
+                '调整到期日汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
+              ),
+              child: FSlider(
+                marks: [
+                  FSliderMark(
+                    value: markPos,
+                    label: Text('盈亏平衡点 ${breakEven.toStringAsFixed(2)}'),
+                    tick: true,
+                  ),
+                ],
+                // label: Text(
+                //   '到期日美元/人民币汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
+                // ),
+                control: FSliderControl.managedContinuous(
+                  controller: con.finalExchangeSliderCon,
+                  onChange: (_) => ref.read(conProvider.notifier).refreshCalc(),
+                ),
+                tooltipBuilder: (_, v) =>
+                    Text((6.0 + v * 2.0).toStringAsFixed(2)),
+              ),
+            );
+          },
         ),
       ],
     );
