@@ -8,7 +8,7 @@ _flutter.loader.load({
     onEntrypointLoaded: async function (engineInitializer) {
         loading.textContent = "Initializing engine...";
         const appRunner = await engineInitializer.initializeEngine({
-            'fontFallbackBaseUrl': 'https://fonts.gstatic.cn/s/',
+            'fontFallbackBaseUrl': 'https://x.p1gd0g.cc/fonts/s/',
         });
 
         loading.textContent = "Running app...";
