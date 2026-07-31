@@ -43,8 +43,9 @@ class Ctrl extends _$Ctrl {
     text: '4.0',
   );
 
-  final FDateFieldController finalDateInputCon = FDateFieldController(
-    date: DateTime.now().add(const Duration(days: 365)),
+  final FDateSelectionController<DateTime?> finalDateInputCon =
+      FDateSelectionController.single(
+    initial: DateTime.now().add(const Duration(days: 365)),
   );
 
   final TextEditingController daysInputCon = TextEditingController(text: '365');

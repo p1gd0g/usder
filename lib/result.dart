@@ -4,6 +4,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:myapp/controller.dart';
 
+/// 统一的卡片布局：固定内边距 + 纵向列，可选顶部角标。
+class _InfoCard extends FCard {
+  _InfoCard({
+    this.badge,
+    required this.children,
+  }) : super(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: .start,
+              children: [
+                if (badge != null) badge,
+                ...children,
+              ],
+            ),
+          ),
+        );
+
+  final Widget? badge;
+  final List<Widget> children;
+}
+
 class Result extends ConsumerWidget {
   const Result({super.key});
 
@@ -30,23 +53,27 @@ class Result extends ConsumerWidget {
             mainAxisAlignment: .center,
             spacing: 16,
             children: [
-              FCard(
-                title: const Text('美元汇率盈亏'),
-                subtitle: Text('本金 \$ ${con.usdAsset}'),
-                child: Text('￥${con.usdExchangePnL()}'),
+              _InfoCard(
+                children: [
+                  const Text('美元汇率盈亏'),
+                  Text('本金 \$ ${con.usdAsset}'),
+                  Text('￥${con.usdExchangePnL()}'),
+                ],
               ),
-              Icon(FIcons.plus, size: 48),
-              FCard(
-                title: const Text('美元理财收益'),
-                subtitle: Text('\$ ${usd.usdProfit}'),
-                child: Text('￥${usd.rmbEquivalent}'),
+              const Icon(FLucideIcons.plus, size: 48),
+              _InfoCard(
+                children: [
+                  const Text('美元理财收益'),
+                  Text('\$ ${usd.usdProfit}'),
+                  Text('￥${usd.rmbEquivalent}'),
+                ],
               ),
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: .center,
                 spacing: 16,
                 children: [
-                  Icon(FIcons.equal, size: 48),
+                  const Icon(FLucideIcons.equal, size: 48),
                   _TotalPnlCard(
                     usdProfit: usd.usdProfit,
                     usdAsset: con.usdAsset,
@@ -59,21 +86,25 @@ class Result extends ConsumerWidget {
             ],
           )
         else ...[
-          FCard(
-            title: const Text('美元汇率盈亏'),
-            subtitle: Text('本金 \$ ${con.usdAsset}'),
-            child: Text('￥${con.usdExchangePnL()}'),
+          _InfoCard(
+            children: [
+              const Text('美元汇率盈亏'),
+              Text('本金 \$ ${con.usdAsset}'),
+              Text('￥${con.usdExchangePnL()}'),
+            ],
           ),
           SizedBox(height: 16),
           Row(
             mainAxisAlignment: .center,
             spacing: 16,
             children: [
-              Icon(FIcons.plus, size: 48),
-              FCard(
-                title: const Text('美元理财收益'),
-                subtitle: Text('\$ ${usd.usdProfit}'),
-                child: Text('￥${usd.rmbEquivalent}'),
+              const Icon(FLucideIcons.plus, size: 48),
+              _InfoCard(
+                children: [
+                  const Text('美元理财收益'),
+                  Text('\$ ${usd.usdProfit}'),
+                  Text('￥${usd.rmbEquivalent}'),
+                ],
               ),
             ],
           ),
@@ -82,7 +113,7 @@ class Result extends ConsumerWidget {
             mainAxisAlignment: .center,
             spacing: 16,
             children: [
-              Icon(FIcons.equal, size: 48),
+              const Icon(FLucideIcons.equal, size: 48),
               _TotalPnlCard(
                 usdProfit: usd.usdProfit,
                 usdAsset: con.usdAsset,
@@ -99,30 +130,30 @@ class Result extends ConsumerWidget {
             final breakEven = con.breakEvenExchangeRate();
             // 滑块范围 6.0~8.0，将汇率转换为 0~1 位置
             final markPos = ((breakEven - 6.0) / 2.0).clamp(0.0, 1.0);
-            return FCard(
-              title: Text(
-                '调整到期日汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
-              ),
-              child: FSlider(
-                marks: [
-                  FSliderMark(
-                    value: markPos,
-                    label: Text('盈亏平衡点 ${breakEven.toStringAsFixed(2)}'),
-                    tick: true,
-                  ),
-                ],
-                // label: Text(
-                //   '到期日美元/人民币汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
-                // ),
-                control: FSliderControl.managedContinuous(
-                  controller: con.finalExchangeSliderCon,
-                  onChange: (_) => WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => ref.read(ctrlProvider.notifier).refreshCalc(),
-                  ),
+            return _InfoCard(
+              children: [
+                Text(
+                  '调整到期日汇率：${con.finalExchangeFromSlider.toStringAsFixed(2)}',
                 ),
-                tooltipBuilder: (_, v) =>
-                    Text((6.0 + v * 2.0).toStringAsFixed(2)),
-              ),
+                FSlider(
+                  marks: [
+                    FSliderMark(
+                      value: markPos,
+                      label: Text('盈亏平衡点 ${breakEven.toStringAsFixed(2)}'),
+                      tick: true,
+                    ),
+                  ],
+                  control: FSliderControl.managedContinuous(
+                    controller: con.finalExchangeSliderCon,
+                    onChange: (_) =>
+                        WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => ref.read(ctrlProvider.notifier).refreshCalc(),
+                    ),
+                  ),
+                  tooltipBuilder: (_, v) =>
+                      Text((6.0 + v * 2.0).toStringAsFixed(2)),
+                ),
+              ],
             );
           },
         ),
@@ -138,13 +169,13 @@ class _RmbProfitCard extends StatelessWidget {
   const _RmbProfitCard({required this.profit, required this.isWinner});
 
   @override
-  Widget build(BuildContext context) {
-    return FCard(
-      image: isWinner ? FBadge(child: const Text('收益更高 🏆')) : null,
-      title: const Text('人民币理财收益'),
-      child: Text('￥$profit'),
-    );
-  }
+  Widget build(BuildContext context) => _InfoCard(
+        badge: isWinner ? FBadge(child: const Text('收益更高 🏆')) : null,
+        children: [
+          const Text('人民币理财收益'),
+          Text('￥$profit'),
+        ],
+      );
 }
 
 class _TotalPnlCard extends StatelessWidget {
@@ -163,12 +194,12 @@ class _TotalPnlCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return FCard(
-      image: isWinner ? FBadge(child: const Text('收益更高 🏆')) : null,
-      title: const Text('美元理财总盈亏'),
-      subtitle: Text('\$ ${(usdProfit + usdAsset).toPrecision(3)}'),
-      child: Text('￥${(rmbEquivalent + usdExchangePnL).toPrecision(3)}'),
-    );
-  }
+  Widget build(BuildContext context) => _InfoCard(
+        badge: isWinner ? FBadge(child: const Text('收益更高 🏆')) : null,
+        children: [
+          const Text('美元理财总盈亏'),
+          Text('\$ ${(usdProfit + usdAsset).toPrecision(3)}'),
+          Text('￥${(rmbEquivalent + usdExchangePnL).toPrecision(3)}'),
+        ],
+      );
 }

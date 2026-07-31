@@ -40,7 +40,7 @@ final class CtrlProvider extends $NotifierProvider<Ctrl, int> {
   }
 }
 
-String _$ctrlHash() => r'653e57269536021e9337d12609fdb5a7a27a9b2e';
+String _$ctrlHash() => r'1fe495ef36b0289dbab2d83bf7fc515ceaf1da4b';
 
 abstract class _$Ctrl extends $Notifier<int> {
   int build();

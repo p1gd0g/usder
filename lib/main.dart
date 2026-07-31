@@ -17,22 +17,25 @@ void main() {
         .iOS,
         .fuchsia,
       }.contains(defaultTargetPlatform)
-      ? FThemes.neutral.dark.touch
-      : FThemes.neutral.dark.desktop;
+      ? FTheme.neutral.dark.touch
+      : FTheme.neutral.dark.desktop;
   runApp(
     ProviderScope(
-      child: MaterialApp(
-        builder: (context, child) {
-          final typography = FThemeBuildContext(context).theme.typography;
-          return DefaultTextStyle(style: typography.md, child: child!);
-        },
-        navigatorObservers: [PosthogObserver()],
-        debugShowCheckedModeBanner: false,
-        locale: const Locale('zh'),
-        supportedLocales: FLocalizations.supportedLocales,
-        localizationsDelegates: FLocalizations.localizationsDelegates,
-        theme: theme.toApproximateMaterialTheme(),
-        home: const HomePage(),
+      child: FTheme(
+        data: theme,
+        child: MaterialApp(
+          builder: (context, child) {
+            final typography = context.theme.typography;
+            return DefaultTextStyle(style: typography.body.md, child: child!);
+          },
+          navigatorObservers: [PosthogObserver()],
+          debugShowCheckedModeBanner: false,
+          locale: const Locale('zh'),
+          supportedLocales: FLocalizations.supportedLocales,
+          localizationsDelegates: FLocalizations.localizationsDelegates,
+          theme: theme.toApproximateMaterialTheme(),
+          home: const HomePage(),
+        ),
       ),
     ),
   );
@@ -72,7 +75,7 @@ class HomePage extends ConsumerWidget {
             ],
             builder: (context, value, child) {
               return FHeaderAction(
-                icon: Icon(FIcons.ellipsis),
+                icon: const Icon(FLucideIcons.ellipsis),
                 onPress: () {
                   value.toggle();
                 },
@@ -207,7 +210,7 @@ class HomePage extends ConsumerWidget {
                   label: Text('按到期日'),
                   child: FDateField.calendar(
                     label: const Text('到期日'),
-                    control: FDateFieldControl.managed(
+                    selectionControl: FDateSelectionControl.managedSingle(
                       controller: con.finalDateInputCon,
                     ),
                   ),
@@ -219,7 +222,7 @@ class HomePage extends ConsumerWidget {
               onPress: () {
                 con.incrementCalc();
               },
-              prefix: const Icon(FIcons.calculator),
+              prefix: const Icon(FLucideIcons.calculator),
               child: const Text('计算收益（不构成投资建议）'),
             ),
 

@@ -377,18 +377,18 @@ packages:
     dependency: "direct main"
     description:
       name: forui
-      sha256: "099deb57d345aaafd73b4ee3dc150bfe032e1d583a898461183586cbb0153778"
+      sha256: "3fd49f758af004ec1af867b4f6b9786e4b83b961057be51f1c29f273f449cb55"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.21.3"
+    version: "0.24.3"
   forui_assets:
     dependency: transitive
     description:
       name: forui_assets
-      sha256: f83517074a11f6458986dbb5d0a0b364cebf6861a4e143acb2d51e6626ecf813
+      sha256: "95f11ad6f0d560a91971388f13ebf7beb77a631f9bb6ba5ab7b3454ac3acda96"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.21.0"
+    version: "0.24.0"
   freezed_annotation:
     dependency: transitive
     description:
@@ -565,14 +565,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.6.4"
-  nitrogen_types:
-    dependency: transitive
-    description:
-      name: nitrogen_types
-      sha256: "5d4ec453aea14e34607bc6021ff1381192e8fcd8541bf103638baa4d013e668f"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.4.0+1"
   node_preamble:
     dependency: transitive
     description:
