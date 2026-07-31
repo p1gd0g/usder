@@ -43,7 +43,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final con = ref.read(conProvider.notifier);
+    final con = ref.read(ctrlProvider.notifier);
 
     return FScaffold(
       header: FHeader(
@@ -225,7 +225,7 @@ class HomePage extends ConsumerWidget {
 
             Consumer(
               builder: (context, ref, child) {
-                final calc = ref.watch(conProvider);
+                final calc = ref.watch(ctrlProvider);
                 if (calc == 0) {
                   return const SizedBox.shrink();
                 }

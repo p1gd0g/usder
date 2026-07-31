@@ -9,8 +9,8 @@ class Result extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(conProvider); // 订阅 state 变化，触发 rebuild
-    final con = ref.read(conProvider.notifier);
+    ref.watch(ctrlProvider); // 订阅 state 变化，触发 rebuild
+    final con = ref.read(ctrlProvider.notifier);
 
     final usd = con.usdProfitWithExchange();
     final rmbProfit = con.rmbProfit();
@@ -117,7 +117,7 @@ class Result extends ConsumerWidget {
                 control: FSliderControl.managedContinuous(
                   controller: con.finalExchangeSliderCon,
                   onChange: (_) => WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => ref.read(conProvider.notifier).refreshCalc(),
+                    (_) => ref.read(ctrlProvider.notifier).refreshCalc(),
                   ),
                 ),
                 tooltipBuilder: (_, v) =>

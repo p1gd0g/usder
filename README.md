@@ -3,7 +3,7 @@
 ## build
 
 ```
-$ENV:build_vsn='0.5.2'
+$ENV:build_vsn='0.5.3'
 flutter build web --build-name=$ENV:build_vsn --dart-define=vsn=$ENV:build_vsn --output=public
 ```
 
@@ -26,4 +26,10 @@ After setting up the configuration, all that is left to do is run the package.
 ```shell
 flutter pub get
 dart run flutter_launcher_icons
+```
+
+## riverpod
+
+```
+dart run build_runner watch -d
 ```

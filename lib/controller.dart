@@ -67,7 +67,7 @@ class Ctrl extends _$Ctrl {
   }
 
   int get profitDays {
-    if (tabIndex == 1) {
+    if (tabIndex == 0) {
       return int.tryParse(daysInputCon.text) ?? 0;
     }
 

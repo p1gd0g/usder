@@ -10,22 +10,22 @@ part of 'controller.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(Ctrl)
-final conProvider = ConProvider._();
+final ctrlProvider = CtrlProvider._();
 
-final class ConProvider extends $NotifierProvider<Ctrl, int> {
-  ConProvider._()
+final class CtrlProvider extends $NotifierProvider<Ctrl, int> {
+  CtrlProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'conProvider',
+        name: r'ctrlProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$conHash();
+  String debugGetCreateSourceHash() => _$ctrlHash();
 
   @$internal
   @override
@@ -40,13 +40,13 @@ final class ConProvider extends $NotifierProvider<Ctrl, int> {
   }
 }
 
-String _$conHash() => r'e9fd9c74f903df43c9e6432a91fbb641e3275dcf';
+String _$ctrlHash() => r'653e57269536021e9337d12609fdb5a7a27a9b2e';
 
 abstract class _$Ctrl extends $Notifier<int> {
   int build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<int, int>;
     final element =
         ref.element
@@ -56,6 +56,6 @@ abstract class _$Ctrl extends $Notifier<int> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
