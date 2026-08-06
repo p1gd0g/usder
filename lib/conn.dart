@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:myapp/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:http/http.dart' as http;
 
 part 'conn.g.dart';
+
+final Dio _dio = Dio();
 
 class Conn {
   static const String _rfxSpQuot =
@@ -16,11 +18,11 @@ class Conn {
   Future<String> getRfxSpQuot() async {
     appLogger.d('Fetching RfxSpQuot from $_rfxSpQuot');
 
-    final uri = Uri.parse(
+    final rsp = await _dio.get<String>(
       _corsHost,
-    ).replace(queryParameters: {'url': _rfxSpQuot});
-    final rsp = await http.get(uri);
-    final data = jsonDecode(rsp.body);
+      queryParameters: {'url': _rfxSpQuot},
+    );
+    final data = jsonDecode(rsp.data!);
     final json = RfxSpQuotJson.fromJson(data);
     return json.records!.first.bidPrc!;
   }
@@ -28,11 +30,11 @@ class Conn {
   Future<String> getUsdRate() async {
     appLogger.d('Fetching UsdRate from $_usdRate');
 
-    final uri = Uri.parse(
+    final rsp = await _dio.get<String>(
       _corsHost,
-    ).replace(queryParameters: {'url': _usdRate});
-    final rsp = await http.get(uri);
-    final data = jsonDecode(rsp.body);
+      queryParameters: {'url': _usdRate},
+    );
+    final data = jsonDecode(rsp.data!);
     final json = UsdRateJson.fromJson(data);
     return json.sevenDayAnnualization!;
   }

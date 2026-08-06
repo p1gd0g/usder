@@ -16,7 +16,7 @@ class _InfoCard extends FCard {
               spacing: 8,
               crossAxisAlignment: .start,
               children: [
-                if (badge != null) badge,
+                ?badge,
                 ...children,
               ],
             ),
