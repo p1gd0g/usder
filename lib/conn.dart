@@ -8,35 +8,45 @@ part 'conn.g.dart';
 final Dio _dio = Dio();
 
 class Conn {
-  static const String _rfxSpQuot =
+  static const String _rfxSpQuotURL =
       'https://www.chinamoney.com.cn/r/cms/www/chinamoney/data/fx/rfx-sp-quot.json';
 
-  static const String _usdRate =
+  static const String _usdRateURL =
       'https://www.bocwm.cn/webApi/cms/productNetWorth/getNetWorthImageByCode?productCode=RJHQDUSD01A&dayCount=5';
   static const String _corsHost = 'https://cors.p1gd0g.cc';
 
   Future<String> getRfxSpQuot() async {
-    appLogger.d('Fetching RfxSpQuot from $_rfxSpQuot');
+    appLogger.d('Fetching RfxSpQuot from $_rfxSpQuotURL');
 
-    final rsp = await _dio.get<String>(
-      _corsHost,
-      queryParameters: {'url': _rfxSpQuot},
-    );
-    final data = jsonDecode(rsp.data!);
-    final json = RfxSpQuotJson.fromJson(data);
-    return json.records!.first.bidPrc!;
+    try {
+      final rsp = await _dio.get<String>(
+        _corsHost,
+        queryParameters: {'url': _rfxSpQuotURL},
+      );
+      final data = jsonDecode(rsp.data!);
+      final json = RfxSpQuotJson.fromJson(data);
+      return json.records!.first.bidPrc!;
+    } catch (e) {
+      appLogger.e('Error fetching RfxSpQuot: $e');
+      return '';
+    }
   }
 
   Future<String> getUsdRate() async {
-    appLogger.d('Fetching UsdRate from $_usdRate');
+    appLogger.d('Fetching UsdRate from $_usdRateURL');
 
-    final rsp = await _dio.get<String>(
-      _corsHost,
-      queryParameters: {'url': _usdRate},
-    );
-    final data = jsonDecode(rsp.data!);
-    final json = UsdRateJson.fromJson(data);
-    return json.sevenDayAnnualization!;
+    try {
+      final rsp = await _dio.get<String>(
+        _corsHost,
+        queryParameters: {'url': _usdRateURL},
+      );
+      final data = jsonDecode(rsp.data!);
+      final json = UsdRateJson.fromJson(data);
+      return json.sevenDayAnnualization!;
+    } catch (e) {
+      appLogger.e('Error fetching UsdRate: $e');
+      return '';
+    }
   }
 }
 
