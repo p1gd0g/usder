@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:forui/forui.dart';
 import 'package:myapp/conn.dart';
@@ -7,6 +7,8 @@ import 'package:myapp/controller.dart';
 import 'package:myapp/result.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'
+    as flutter_localizations;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,14 +27,21 @@ void main() {
         data: theme,
         child: MaterialApp(
           builder: (context, child) {
-            final typography = context.theme.typography;
-            return DefaultTextStyle(style: typography.body.md, child: child!);
+            return FTheme(
+              data: theme,
+              child: FToaster(child: FTooltipGroup(child: child!)),
+            );
           },
           navigatorObservers: [PosthogObserver()],
           debugShowCheckedModeBanner: false,
           locale: const Locale('zh'),
           supportedLocales: FLocalizations.supportedLocales,
-          localizationsDelegates: FLocalizations.localizationsDelegates,
+          localizationsDelegates: [
+            ...FLocalizations.localizationsDelegates,
+            flutter_localizations.GlobalMaterialLocalizations.delegate,
+            flutter_localizations.GlobalWidgetsLocalizations.delegate,
+            flutter_localizations.GlobalCupertinoLocalizations.delegate,
+          ],
           theme: theme.toApproximateMaterialTheme(),
           home: const HomePage(),
         ),
