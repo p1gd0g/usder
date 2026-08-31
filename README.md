@@ -3,7 +3,7 @@
 ## build
 
 ```
-$ENV:build_vsn='0.5.6'
+$ENV:build_vsn='0.5.7'
 .\script\deploy.ps1 -vsn $ENV:build_vsn
 ```
 

@@ -40678,7 +40678,7 @@ o.bV$=p
 q=p}o.aad(new A.CT(l,new A.LK(r,j),k,q,j))
 o.Tt()},
 bHw(){var s=null
-return new A.Be("USDer","0.5.6",new A.Jn(A.bIW(s,s,new A.FM("assets/icons/Icon-192.png",s,s)),48,48,s),"p1gd0g \xa9 2026",A.b([A.bru(new A.aOX(),A.aPD(),t.yR),A.bG("Build time: 2026-08-31 16:20:07",s,s,s,s,s,s),A.bG("Wasm: false",s,s,s,s,s,s),A.bG("Debug mode: false",s,s,s,s,s,s)],t.p),s)},
+return new A.Be("USDer","0.5.7",new A.Jn(A.bIW(s,s,new A.FM("assets/icons/Icon-192.png",s,s)),48,48,s),"p1gd0g \xa9 2026",A.b([A.bru(new A.aOX(),A.aPD(),t.yR),A.bG("Build time: 2026-08-31 16:27:18",s,s,s,s,s,s),A.bG("Wasm: false",s,s,s,s,s,s),A.bG("Debug mode: false",s,s,s,s,s,s)],t.p),s)},
 bi9:function bi9(a){this.a=a},
 a3Y:function a3Y(a){this.a=a},
 aJw:function aJw(){},
