@@ -5,10 +5,12 @@ import 'package:forui/forui.dart';
 import 'package:myapp/conn.dart';
 import 'package:myapp/controller.dart';
 import 'package:myapp/result.dart';
+import 'package:myapp/utils/env.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart'
     as flutter_localizations;
+import 'package:package_info_plus/package_info_plus.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +79,14 @@ class HomePage extends ConsumerWidget {
                     title: const Text('关注作者 @p1gd0g'),
                     onPress: () => launchUrlString(
                       'https://mp.weixin.qq.com/s/yoFS-PvjhuvyNDBxZNO9Vg',
+                    ),
+                  ),
+                  FTile(
+                    title: Text('关于'),
+                    onPress: () => showFDialog(
+                      context: context,
+                      useRootNavigator: true,
+                      builder: (context, style, animation) => MyAbout(),
                     ),
                   ),
                 ],
@@ -244,20 +254,40 @@ class HomePage extends ConsumerWidget {
                 return const Result();
               },
             ),
-
-            // if (calc == 0)
-            //   const SizedBox()
-            // else ...[
-            //   Builder(
-            //     builder: (context) {
-            //       appLogger.i('input, ${con.assetInputCon.text}');
-            //       return const Result();
-            //     },
-            //   ),
-            // ],
           ],
         ),
       ),
     );
   }
+}
+
+class MyAbout extends AboutDialog {
+  MyAbout({super.key})
+    : super(
+        applicationName: 'USDer',
+        applicationIcon: Image.asset(
+          'assets/icons/Icon-192.png',
+          width: 48,
+          height: 48,
+        ),
+        applicationVersion: Env.version,
+        applicationLegalese: 'p1gd0g © 2026',
+        children: [
+          FutureBuilder<PackageInfo>(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Text(
+                  "Package version: ${snapshot.data?.version ?? 'Unknown version'}",
+                );
+              } else {
+                return FCircularProgress();
+              }
+            },
+          ),
+          Text('Build time: ${Env.buildTime}'),
+          Text('Wasm: ${Env.isRunningWithWasm}'),
+          Text('Debug mode: $kDebugMode'),
+        ],
+      );
 }

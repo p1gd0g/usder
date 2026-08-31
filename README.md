@@ -3,8 +3,8 @@
 ## build
 
 ```
-$ENV:build_vsn='0.5.5'
-flutter build web --build-name=$ENV:build_vsn --dart-define=vsn=$ENV:build_vsn --output=public
+$ENV:build_vsn='0.5.6'
+.\script\deploy.ps1 -vsn $ENV:build_vsn
 ```
 
 ## generate icon
